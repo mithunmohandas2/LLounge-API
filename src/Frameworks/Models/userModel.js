@@ -2,7 +2,11 @@ const mongoose = require('mongoose'); // Erase if already required
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema({
-    name: {
+    fName: {
+        type: String,
+        required: true,
+    },
+    lName: {
         type: String,
         required: true,
     },
@@ -20,15 +24,31 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    profilePic: {
+    image: { type: String },
+    role: {
         type: String,
+        default: 'user',
+        enum: ['admin', 'user', 'instructor'],
     },
-    admin: {
+    isBlocked: {
         type: Boolean,
-        default: false,
-    }
+        default: false
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    qualification: { type: String },
+    address: {},
+    enrolls: [{
+        courseId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Course'
+        },
+        Progress: { type: mongoose.Types.Decimal128 },
+    }]
 
-});
+}, { timestamps: true });
 
 //Export the model
 module.exports = mongoose.model('User', userSchema);

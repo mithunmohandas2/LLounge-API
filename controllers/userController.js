@@ -2,8 +2,17 @@ const User = require('../src/Frameworks/Models/userModel');
 const dotenv = require('dotenv')
 const jwt = require('jsonwebtoken');
 
+//create JWT Token
+const createToken = async (id) => {
+    try {
+        return await jwt.sign({ _id: id }, process.env.secretJWT, { expiresIn: '24h' });
+    } catch (error) {
+        return error.message;
+    }
+}
+
 const test = async (req, res) => {
-    res.json({ response: 'Test success' })
+    res.json({ response: 'API running successfully' })
 }
 
 //Register User - Signup
@@ -13,7 +22,11 @@ const registerUser = async (req, res) => {
         const { name, email, phone, password } = req.body
         const admin = req.body.admin ? req.body.admin : false
         if (!email || !name || !password || !phone) {
-            return res.json({ error: "Please fill all input fields" })
+            // return res.json({ error: "Please fill all input fields" })
+            return res.status(400).json({
+                success: false,
+                message: "Missing required fields",
+            });
         }
         const emailMatch = await User.findOne({ email })
         const phoneMatch = await User.findOne({ phone })
@@ -63,14 +76,7 @@ const loginUser = async (req, res) => {
     }
 }
 
-//create JWT Token
-const createToken = async (id) => {
-    try {
-        return await jwt.sign({ _id: id }, process.env.secretJWT, { expiresIn: '24h' });
-    } catch (error) {
-        return error.message;
-    }
-}
+
 
 //Upload User Profile Picture
 const uploadPhoto = async (req, res) => {
