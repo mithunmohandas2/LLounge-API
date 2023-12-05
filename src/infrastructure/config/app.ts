@@ -12,7 +12,16 @@ export const createServer = () => {
         app.use(logger('dev'));
         app.use(express.urlencoded({ extended: false }));
         app.use(express.static(path.join(__dirname, 'public')));
-        
+
+
+        // Enable CORS for all routes
+        app.use((req, res, next) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+            next();
+        });
+
         // Routes
         app.use('/', userRouter)
 

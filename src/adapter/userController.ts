@@ -50,7 +50,7 @@ class userController {
         try {
             console.log('userController')
             const user = await this.usercase.signIn(req.body)
-            res.status(user.status).json(user.data)
+            res.status(user.status).json(user)
         } catch (error) {
             console.log(error)
             return res.status(500).json({ success: false, message: error });

@@ -1,6 +1,10 @@
 import User from "../domain/user";
 import userRepository from "../infrastructure/repository/userRepository";
+import BcryptPasswordHashingService from './interface/encryptService';
+import JWTService from "./interface/jwtService";
 
+const encryptService = new BcryptPasswordHashingService();
+const tokenService = new JWTService()
 class Userusecase {
     private userRepository: userRepository
     constructor(userRepository: userRepository) {
@@ -18,6 +22,8 @@ class Userusecase {
             }
         }
         else {
+            const newPassword = await encryptService.hashData(user.password) //Hashing password
+            user.password = newPassword
             const registerData = await this.userRepository.save(user)
             return {
                 status: 200,
@@ -32,16 +38,27 @@ class Userusecase {
         console.log('inside useCase')
         const userFound = await this.userRepository.findByEmail(user.email)
         if (userFound) {
-            return {
-                status: 200,
-                data: 'user already exist'
+            const hashed = userFound.data.password
+            const isValid = await encryptService.verifyHashData(user.password, hashed)  //not working
+            console.log(isValid)
+            if (!isValid) {
+                return {
+                    status: 400,
+                    message: 'Invalid Credentials'
+                }
             }
-        }
-        else {
-            await this.userRepository.save(user)
+            const token = await tokenService.createToken(userFound.data._id)
+            // console.log(token)
             return {
                 status: 200,
-                data: 'user saved'
+                message: 'Valid User',
+                data: userFound.data,
+                token: token,
+            }
+        } else {
+            return {
+                status: 400,
+                message: 'Invalid Credentials'
             }
         }
     }
