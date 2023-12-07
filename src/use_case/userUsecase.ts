@@ -41,6 +41,12 @@ class Userusecase {
         console.log('inside useCase')
         const userFound = await this.userRepository.findByEmail(user.email)
         if (userFound) {
+            if (userFound.data.isBlocked) {
+                return {
+                    status: 400,
+                    message: 'User blocked by admin'
+                }
+            }
             const hashed = userFound.data.password
             const isValid = await encryptService.verifyHashData(user.password, hashed)  //not working
             console.log(isValid)
@@ -73,6 +79,12 @@ class Userusecase {
             return {
                 status: 400,
                 message: 'Email not registered'
+            }
+        }
+        if (userFound.data.isBlocked) {
+            return {
+                status: 400,
+                message: 'User blocked by admin'
             }
         }
         //send OTP mail   
