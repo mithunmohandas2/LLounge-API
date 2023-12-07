@@ -47,7 +47,7 @@ class Userusecase {
                     message: 'Invalid Credentials'
                 }
             }
-            const token = await tokenService.createToken(userFound.data._id)
+            const token = await tokenService.createToken(userFound.data._id,userFound.data.role)
             // console.log(token)
             return {
                 status: 200,
