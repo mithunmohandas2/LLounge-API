@@ -1,7 +1,10 @@
 import User from "../domain/user";
 import userRepository from "../infrastructure/repository/userRepository";
+import { verifyOTP } from "../infrastructure/repository/otpRepository";
+import { verifyEmail } from "./interface/emailService";
 import BcryptPasswordHashingService from './interface/encryptService';
 import JWTService from "./interface/jwtService";
+import Otp from "../domain/otp";
 
 const encryptService = new BcryptPasswordHashingService();
 const tokenService = new JWTService()
@@ -47,7 +50,7 @@ class Userusecase {
                     message: 'Invalid Credentials'
                 }
             }
-            const token = await tokenService.createToken(userFound.data._id,userFound.data.role)
+            const token = await tokenService.createToken(userFound.data._id, userFound.data.role)
             // console.log(token)
             return {
                 status: 200,
@@ -63,6 +66,29 @@ class Userusecase {
         }
     }
 
+    async sendOTP(user: User) {
+        console.log('inside useCase')
+        const userFound = await this.userRepository.findByEmail(user.email)
+        if (!userFound) {         //unregistered user
+            return {
+                status: 400,
+                message: 'Email not registered'
+            }
+        }
+        //send OTP mail   
+        const sentMail = await verifyEmail(user.email)
+
+        return {
+            status: sentMail.status,
+            message: sentMail.message,
+        }
+    }
+
+
+    async verifyOTP(user: Otp) {
+        console.log('inside useCase')
+        return await verifyOTP(user.email, user.otp)
+    }
 
 }
 

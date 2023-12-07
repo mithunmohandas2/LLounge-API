@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer'
-const otpService = require('../Services/otpService');
+import otpService from './otpService'
+require('dotenv').config()
+import { saveOtp } from '../../infrastructure/repository/otpRepository'
 
 const auth_email = process.env.auth_email
 const auth_password = process.env.auth_pass
@@ -33,11 +35,13 @@ export const sendEmail = async (email: string, mailSubject: string, message: str
     const sendEmail = await transporter.sendMail(mailOptions);
     if (sendEmail) {
         return {
+            status: 200,
             success: true,
             message: "Email sent successfully"
         }
     } else {
         return {
+            status: 400,
             success: false,
             message: "Failed to send email"
         }
@@ -48,18 +52,27 @@ export const sendEmail = async (email: string, mailSubject: string, message: str
 // Email Verification OTP 
 
 export const verifyEmail = async (email: string) => {
-    const Otp = await otpService.generateOTP(4); //OTP digits given as parameter
-    let mailSubject = 'Email Verification'
-    let message = `<p>Your Email ID : ${email}</p> <p style ="color:tomato; font-size:25px; letter-spacing:2px;"><b> ${Otp}</b></p> 
-    <p>This code can be used to verify your email in Learner's Lounge.
-     The code expire in 15 minutes`
-    //send OTP as Email
-    const sendOtp = await sendEmail(email, mailSubject, message)
+    try {
+        const Otp = await otpService.generateOTP(5); //OTP digits given as parameter
+        const savedOtp = await saveOtp(email, Otp)
 
-    if (!sendOtp.success) {
+        let mailSubject = 'Email Verification'
+        let message = `<p>Your Email ID : ${email}</p> <p style ="color:tomato; font-size:25px; letter-spacing:2px;"><b> ${Otp}</b></p> 
+        <p>This code can be used to verify your email in Learner's Lounge.
+         The code expire in 15 minutes`
+
+        //send OTP as Email
+        const sendOtp = await sendEmail(email, mailSubject, message)
+        // console.log('emailService', sendOtp)
         return {
-            success: false,
+            status: sendOtp.status,
             message: sendOtp.message
         }
+    } catch (error) {
+        return {
+            status: 400,
+            message: (error as Error).message
+        }
     }
+
 }

@@ -42,7 +42,7 @@ class userController {
             res.status(user.status).json(user)
         } catch (error) {
             console.log(error)
-            return res.status(500).json({ success: false, message: error });
+            return res.status(500).json({ success: false, message: (error as Error).message });
         }
     }
 
@@ -53,11 +53,33 @@ class userController {
             res.status(user.status).json(user)
         } catch (error) {
             console.log(error)
-            return res.status(500).json({ success: false, message: error });
+            return res.status(500).json({ success: false, message: (error as Error).message });
         }
     }
 
+    async sendOTP(req: Request, res: Response) {
+        try {
+            console.log('userController')
+            const response = await this.usercase.sendOTP(req.body)
+            res.status(response.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
 
+    async verifyOTP(req: Request, res: Response) {
+        try {
+            console.log('userController')
+            const response = await this.usercase.verifyOTP(req.body)
+            res.status(response.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+ 
 }
 
 export default userController

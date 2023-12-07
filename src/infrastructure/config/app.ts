@@ -23,7 +23,10 @@ export const createServer = () => {
         });
 
         // Routes
-        app.use('/', userRouter)
+        app.use('/api/user', userRouter)
+
+        //test Route
+        app.get('/', (req, res) => res.status(200).json({ message: 'API running successfully' }));
 
         return app
     }
