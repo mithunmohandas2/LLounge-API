@@ -1,4 +1,5 @@
 import userRouter from '../route/userRoute'
+import adminRouter from '../route/adminRoute'
 import express from 'express'
 import path from 'path';
 import logger from 'morgan';
@@ -24,6 +25,7 @@ export const createServer = () => {
 
         // Routes
         app.use('/api/user', userRouter)
+        app.use('/api/admin', adminRouter)
 
         //test Route
         app.get('/', (req, res) => res.status(200).json({ message: 'API running successfully' }));

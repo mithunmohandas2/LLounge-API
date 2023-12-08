@@ -7,6 +7,7 @@ class userRepository implements UserRepository {
         const newUser = new UserModel(user)
         await newUser.save()
         return {
+            status: 200,
             success: true,
             data: newUser,
             message: 'User registration successful',
@@ -18,6 +19,7 @@ class userRepository implements UserRepository {
         const existingUser = await UserModel.findOne({ email })
         if (existingUser) {
             return {
+                status: 200,
                 success: true,
                 data: existingUser,
                 message: 'User details found in database'
@@ -33,6 +35,7 @@ class userRepository implements UserRepository {
         const existingUser = await UserModel.findOne({ phone })
         if (existingUser) {
             return {
+                status: 200,
                 success: true,
                 data: existingUser,
                 message: 'User details found in database'
@@ -42,5 +45,8 @@ class userRepository implements UserRepository {
             return null
         }
     }
+
+   
+
 }
 export default userRepository
