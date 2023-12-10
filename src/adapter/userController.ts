@@ -79,6 +79,17 @@ class userController {
         }
     }
 
+    async tokenDecode(req: Request, res: Response) {
+        try {
+            console.log('userController')
+            const response = await this.usercase.tokenDecode(req.body)
+            res.status(response.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
  
 }
 

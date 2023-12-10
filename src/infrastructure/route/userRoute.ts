@@ -14,5 +14,6 @@ router.post('/register', (req, res) => controller.register(req, res));
 router.post('/login', (req, res) => controller.signIn(req, res));
 router.post('/sendOTP', (req, res) => controller.sendOTP(req, res));
 router.post('/verifyOTP', (req, res) => controller.verifyOTP(req, res));
+router.post('/tokenDecode', (req, res) => controller.tokenDecode(req, res));
 
 export default router

@@ -102,6 +102,20 @@ class Userusecase {
         return await verifyOTP(user.email, user.otp)
     }
 
+    async tokenDecode(data: { token: string }) {
+        console.log('inside useCase')
+        if (!data.token) return {
+            status: 401,
+            message: 'Token misssing, Please login again',
+        }
+        const response = await tokenService.verifyToken(data.token)
+        console.log(response?.data?.userdata)
+        return {
+            status: 200,
+            message: response?.data?.userdata,
+        }
+    }
+
 }
 
 export default Userusecase
