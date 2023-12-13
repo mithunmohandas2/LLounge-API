@@ -5,9 +5,12 @@ import { verifyEmail } from "./interface/emailService";
 import BcryptPasswordHashingService from './interface/encryptService';
 import JWTService from "./interface/jwtService";
 import Otp from "../domain/otp";
+import adminRepository from "../infrastructure/repository/adminRepository";
 
 const encryptService = new BcryptPasswordHashingService();
 const tokenService = new JWTService()
+const adminrepository = new adminRepository()
+
 class Userusecase {
     private userRepository: userRepository
     constructor(userRepository: userRepository) {
@@ -109,10 +112,13 @@ class Userusecase {
             message: 'Token misssing, Please login again',
         }
         const response = await tokenService.verifyToken(data.token)
-        console.log(response?.data?.userdata)
+        const _id = response?.data?.userData
+        const User = await adminrepository.findById(_id)
+        console.log(User)
         return {
             status: 200,
-            message: response?.data?.userdata,
+            message: User.message,
+            data: User.data,
         }
     }
 

@@ -9,7 +9,7 @@ export const adminJwtAuth = async (req: Request, res: Response, next: NextFuncti
         const token = req.body.token || req.query.token || req.headers["authorization"];
         if (!token) return res.status(401).json({ message: 'Token misssing, Please login again' })
         const decode = await tokenService.verifyToken(token);
-        console.log("decoded", decode)  //test
+        // console.log("decoded", decode)  //test
         if (decode.status !== 200 || decode?.role !== 'admin') return res.status(401).json({ message: 'Unauthorized Access' })
         return next()   // token verify success
 
