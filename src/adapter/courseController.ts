@@ -29,6 +29,51 @@ class courseController {
         }
     }
 
+    async editCourseControl(req: Request, res: Response) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.editCourse(req.body)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+    async blockCourseControl(req: Request, res: Response) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.blockCourse(req.body)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+     async addModuleControl(req: Request, res: Response) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.addModule(req.body)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+     async listCoursesControl(req: Request, res: Response) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.listCourses(req.query)
+            console.log(Course)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
  
 }
 

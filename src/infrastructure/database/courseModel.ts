@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, ObjectId, Decimal128 } from 'mongoose';
 export interface ICourses extends Document {
     _id?: ObjectId;
     courseName: String;
-    branch: ObjectId;
+    branchId: ObjectId;
     description?: String;
     fee: Decimal128;
     isBlocked: Boolean;
@@ -25,7 +25,7 @@ const CoursesSchema: Schema = new Schema({
         required: true,
         unique: true
     },
-    branch: {
+    branchId: {
         type: Schema.Types.ObjectId,
         required: true
     },
@@ -40,9 +40,9 @@ const CoursesSchema: Schema = new Schema({
         type: Boolean,
         default: false,
     },
-    tutor: [{
+    tutor: {
         type: Schema.Types.ObjectId,
-    }],
+    },
     status: {
         type: String,
         enum: ['editRequested', 'forApproval', 'draft'],

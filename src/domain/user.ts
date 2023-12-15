@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose"
+
 interface User {
     id?: string,
     firstName: string,
@@ -23,3 +25,9 @@ interface User {
 }
 
 export default User
+
+
+
+export interface QueryType extends Document {
+    tutorId: ObjectId;
+}

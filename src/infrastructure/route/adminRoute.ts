@@ -16,11 +16,9 @@ const courseCase = new courseUsecase(courseRepo)
 const courseControl = new courseController(courseCase)
 
 const router = express.Router()
-//Test Server
 
 router.post('/listUsers', adminJwtAuth, (req, res) => adminControl.listUserControl(req, res));
 router.post('/blockUser',adminJwtAuth, (req, res) => adminControl.userBlockControl(req, res));
 router.post('/createBranch',adminJwtAuth, (req, res) => courseControl.createBranchControl(req, res));
-router.post('/createCourse',adminJwtAuth, (req, res) => courseControl.createCourseControl(req, res));
 
 export default router

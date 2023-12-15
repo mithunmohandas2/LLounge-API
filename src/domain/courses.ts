@@ -1,28 +1,39 @@
 import { Decimal128, ObjectId } from "mongoose";
 
-export interface Courses{
-    _id?: ObjectId;
-    branch: ObjectId;
+export interface Courses {
+    _id: ObjectId;
+    courseId: ObjectId;
+    branchId: ObjectId;
     courseName: string;
-    Description?: string;
-    Fee: Decimal128;
-    IsBlocked: boolean;
-    Instructor?: ObjectId[];
-    Status?: string;
+    description?: string;
+    fee: Decimal128;
+    isBlocked: boolean;
+    tutor?: ObjectId;
+    status?: string;
     modules?: {
-        Content: string;
-        Duration: string;
-        Materials: string;
-        ModName: string;
+        content: string;
+        duration: string;
+        materials: string;
+        modName: string;
     }[];
-    CreatedAt: Date;
-    UpdatedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface Branch extends Document {
     _id: ObjectId;
     branchName: string;
-    isBlocked:boolean;
-    CreatedAt: Date;
-    UpdatedAt: Date;
+    isBlocked: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
+
+export interface Module extends Document {
+    courseId: ObjectId;
+    content: string;
+    duration: string;
+    materials: string;
+    modName: string;
+}
+
+

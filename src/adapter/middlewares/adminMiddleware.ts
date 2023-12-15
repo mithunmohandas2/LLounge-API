@@ -21,3 +21,4 @@ export const adminJwtAuth = async (req: Request, res: Response, next: NextFuncti
         }
     }
 }
+
