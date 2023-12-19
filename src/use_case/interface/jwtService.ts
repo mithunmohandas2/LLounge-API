@@ -14,8 +14,8 @@ export default class JWTService implements TokenService {
             // console.log("TokenType",typeof(token))
             return token
 
-        } catch (error: any) {
-            console.log(error.message);
+        } catch (error) {
+            console.log((error as Error).message);
             throw error;
         }
     }

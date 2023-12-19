@@ -73,7 +73,6 @@ class courseController {
             return res.status(500).json({ success: false, message: (error as Error).message });
         }
     }
-
  
 }
 

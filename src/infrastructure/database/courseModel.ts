@@ -33,7 +33,7 @@ const CoursesSchema: Schema = new Schema({
         type: String
     },
     fee: {
-        type: Schema.Types.Decimal128,
+        type: Number,
         required: true
     },
     isBlocked: {

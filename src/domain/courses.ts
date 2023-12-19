@@ -6,7 +6,7 @@ export interface Courses {
     branchId: ObjectId;
     courseName: string;
     description?: string;
-    fee: Decimal128;
+    fee: number;
     isBlocked: boolean;
     tutor?: ObjectId;
     status?: string;

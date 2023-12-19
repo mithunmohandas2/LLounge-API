@@ -12,11 +12,11 @@ class userController {
     async register(req: Request, res: Response) {
         try {
             // console.log('userController',req.body)   //test
-            let { firstName, lastName, email, phone, password } = req.body
-            firstName = firstName.trim();
-            lastName = lastName.trim();
-            email = email.trim();
-            phone = phone.trim();
+            const firstName = req.body.firstName.trim();
+            const lastName = req.body.lastName.trim();
+            const email = req.body.email.trim();
+            const phone = req.body.phone.trim();
+            const { password } = req.body
 
             if (!firstName || !email || !password || !phone) {
                 return res.status(400).json({ success: false, message: "Missing required fields" });
@@ -90,7 +90,7 @@ class userController {
         }
     }
 
- 
+
 }
 
 export default userController

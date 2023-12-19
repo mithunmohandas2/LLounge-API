@@ -6,7 +6,7 @@ import { saveOtp } from '../../infrastructure/repository/otpRepository'
 const auth_email = process.env.auth_email
 const auth_password = process.env.auth_pass
 
-let transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
 
     service: 'Gmail',
     auth: {
@@ -16,9 +16,9 @@ let transporter = nodemailer.createTransport({
 })
 
 //test transporter
-transporter.verify((error: any, success) => {
+transporter.verify((error, success) => {
     if (error) {
-        console.log(error);
+        console.log((error as Error).message);
     } else {
         console.log("Mail Server Initialized : " + success)
     }
@@ -56,8 +56,8 @@ export const verifyEmail = async (email: string) => {
         const Otp = await otpService.generateOTP(5); //OTP digits given as parameter
         const savedOtp = await saveOtp(email, Otp)
 
-        let mailSubject = 'Email Verification'
-        let message = `<p>Your Email ID : ${email}</p> <p style ="color:tomato; font-size:25px; letter-spacing:2px;"><b> ${Otp}</b></p> 
+        const mailSubject = 'Email Verification'
+        const message = `<p>Your Email ID : ${email}</p> <p style ="color:tomato; font-size:25px; letter-spacing:2px;"><b> ${Otp}</b></p> 
         <p>This code can be used to verify your email in Learner's Lounge.
          The code expire in 15 minutes`
 

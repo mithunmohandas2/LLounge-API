@@ -145,12 +145,12 @@ class courseRepository {
                 console.log("Saved Module =>", moduleUpdate)
                 return {
                     status: 200,
-                    message: 'New course added',
+                    message: 'New module added',
                 }
             } else {
                 return {
                     status: 400,
-                    message: 'Failed to add new course',
+                    message: 'Failed to add new module',
                 }
             }
         } catch (error) {
@@ -214,7 +214,33 @@ class courseRepository {
         }
     }
 
-    async listCourses(tutorId: ObjectId) {
+    async listCoursesById(_id: ObjectId) {
+        try {
+            console.log('Course Details')  //test
+            const courseData = await CourseModel.findOne({ _id})
+            if (courseData) {
+                console.log("Courses =>", courseData)
+                return {
+                    status: 200,
+                    message: "Course Details",
+                    data: courseData,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to fetch course details',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async listCoursesByTutor(tutorId: ObjectId) {
         try {
             console.log('listCourses')  //test
             const allCourses = await CourseModel.find({ tutor : tutorId })
@@ -223,7 +249,7 @@ class courseRepository {
                 return {
                     status: 200,
                     message: "Course list",
-                    data: allCourses[0],
+                    data: allCourses,
                 }
             } else {
                 return {

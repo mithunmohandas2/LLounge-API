@@ -99,17 +99,24 @@ class courseUsecase {
 
     async listCourses(query: ParsedQs) {
         console.log('inside course useCase')
-        console.log("first")
         // Check if query.tutorId exists and is a string
         if (query && query.tutorId && typeof query.tutorId === 'string') {
             const tutorId: ObjectId = query.tutorId as unknown as ObjectId; //string to ObjectID
-            const newModule = await this.courseRepository.listCourses(tutorId)
+            const newModule = await this.courseRepository.listCoursesByTutor(tutorId)
             return {
                 status: newModule?.status,
                 message: newModule?.message,
                 data: newModule?.data,
             }
-        } else {
+        } else if(query && query._id && typeof query._id === 'string'){
+            const _id: ObjectId = query._id as unknown as ObjectId; //string to ObjectID
+            const newModule = await this.courseRepository.listCoursesById(_id)
+            return {
+                status: newModule?.status,
+                message: newModule?.message,
+                data: newModule?.data,
+            }
+        }else {
             return {
                 status: 400,
                 message: "Invalid query received"
@@ -117,6 +124,7 @@ class courseUsecase {
         }
 
     }
+
 }
 
 export default courseUsecase

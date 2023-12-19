@@ -10,8 +10,8 @@ export default class BcryptPasswordHashingService implements PasswordHashingServ
         try {
             const hashedData = await bcrypt.hash(data, saltRounds);
             return hashedData;
-        } catch (error: any) {
-            console.log(error.message);
+        } catch (error) {
+            console.log((error as Error).message);
             throw error;
         }
     }
@@ -20,8 +20,8 @@ export default class BcryptPasswordHashingService implements PasswordHashingServ
         try {
             const match = await bcrypt.compare(unhashed, hashed);
             return match;
-        } catch (error: any) {
-            console.log(error.message);
+        } catch (error) {
+            console.log((error as Error).message);
             throw error;
         }
     }
