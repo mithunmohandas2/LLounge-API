@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Userusecase from "../use_case/userUsecase";
-import { isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from '../use_case/interface/validations'
+import { isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from '../infrastructure/interface/validations'
 
 
 class userController {

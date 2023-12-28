@@ -1,6 +1,6 @@
 import { ObjectId } from "mongoose";
 
-export interface querData extends Document {
+export interface querData {
     tutorId: ObjectId;
     search: string;
     page: number;

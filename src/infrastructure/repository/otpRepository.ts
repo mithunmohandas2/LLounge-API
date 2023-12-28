@@ -1,6 +1,6 @@
 import { OtpModel } from '../database/otpModel'
 import { UserModel } from '../database/userModel';
-import JWTService from '../../use_case/interface/jwtService';
+import JWTService from '../interface/jwtService';
 const tokenService = new JWTService()
 
 

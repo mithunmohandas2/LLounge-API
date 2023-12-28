@@ -23,11 +23,8 @@ interface User {
     enrolls: [],
     createdAt: Date,
 }
-
 export default User
 
-
-
-export interface QueryType extends Document {
+export interface QueryType {
     tutorId: ObjectId;
 }

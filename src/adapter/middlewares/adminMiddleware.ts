@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import JWTService from "../../use_case/interface/jwtService";
+import JWTService from "../../infrastructure/interface/jwtService";
 const tokenService = new JWTService()
 
 

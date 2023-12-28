@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import otpService from './otpService'
 require('dotenv').config()
-import { saveOtp } from '../../infrastructure/repository/otpRepository'
+import { saveOtp } from '../repository/otpRepository'
 
 const auth_email = process.env.auth_email
 const auth_password = process.env.auth_pass

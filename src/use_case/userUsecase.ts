@@ -1,9 +1,9 @@
 import User from "../domain/user";
 import userRepository from "../infrastructure/repository/userRepository";
 import { verifyOTP } from "../infrastructure/repository/otpRepository";
-import { verifyEmail } from "./interface/emailService";
-import BcryptPasswordHashingService from './interface/encryptService';
-import JWTService from "./interface/jwtService";
+import { verifyEmail } from "../infrastructure/interface/emailService";
+import BcryptPasswordHashingService from '../infrastructure/interface/encryptService';
+import JWTService from "../infrastructure/interface/jwtService";
 import Otp from "../domain/otp";
 import adminRepository from "../infrastructure/repository/adminRepository";
 

@@ -1,4 +1,4 @@
-import { Decimal128, ObjectId } from "mongoose";
+import { ObjectId } from "mongoose";
 
 export interface Courses {
     _id: ObjectId;
@@ -20,7 +20,7 @@ export interface Courses {
     updatedAt: Date;
 }
 
-export interface Branch extends Document {
+export interface Branch {
     _id: ObjectId;
     branchName: string;
     isBlocked: boolean;
@@ -28,7 +28,7 @@ export interface Branch extends Document {
     updatedAt: Date;
 }
 
-export interface Module extends Document {
+export interface Module {
     courseId: ObjectId;
     content: string;
     duration: string;
