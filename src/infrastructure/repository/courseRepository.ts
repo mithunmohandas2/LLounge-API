@@ -214,10 +214,37 @@ class courseRepository {
         }
     }
 
+    async getAllCourses() {
+        try {
+            console.log('listCourses')  //test
+            const allCourses = await CourseModel.find()
+            if (allCourses) {
+                console.log("Courses =>", allCourses)
+                return {
+                    status: 200,
+                    message: "Course list",
+                    data: allCourses,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to fetch courses',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
+
     async listCoursesById(_id: ObjectId) {
         try {
             console.log('Course Details')  //test
-            const courseData = await CourseModel.findOne({ _id})
+            const courseData = await CourseModel.findOne({ _id })
             if (courseData) {
                 console.log("Courses =>", courseData)
                 return {
@@ -243,7 +270,7 @@ class courseRepository {
     async listCoursesByTutor(tutorId: ObjectId) {
         try {
             console.log('listCourses')  //test
-            const allCourses = await CourseModel.find({ tutor : tutorId })
+            const allCourses = await CourseModel.find({ tutor: tutorId })
             if (allCourses) {
                 console.log("Courses =>", allCourses)
                 return {
@@ -266,5 +293,30 @@ class courseRepository {
         }
     }
 
+    async getBranches(role : string) {
+        try {
+            console.log('listBranches')  //test
+            const Branches = role === "user" ? await BranchModel.find({ isBlocked: false }): await BranchModel.find()
+            if (Branches) {
+                console.log("branches =>", Branches)
+                return {
+                    status: 200,
+                    message: "branches list",
+                    data: Branches,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to fetch branches',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
 }
 export default courseRepository

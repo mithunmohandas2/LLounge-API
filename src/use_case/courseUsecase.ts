@@ -102,19 +102,19 @@ class courseUsecase {
         // Check if query.tutorId exists and is a string
         if (query && query.tutorId && typeof query.tutorId === 'string') {
             const tutorId: ObjectId = query.tutorId as unknown as ObjectId; //string to ObjectID
-            const newModule = await this.courseRepository.listCoursesByTutor(tutorId)
+            const courses = await this.courseRepository.listCoursesByTutor(tutorId)
             return {
-                status: newModule?.status,
-                message: newModule?.message,
-                data: newModule?.data,
+                status: courses?.status,
+                message: courses?.message,
+                data: courses?.data,
             }
         } else if(query && query._id && typeof query._id === 'string'){
             const _id: ObjectId = query._id as unknown as ObjectId; //string to ObjectID
-            const newModule = await this.courseRepository.listCoursesById(_id)
+            const courses = await this.courseRepository.listCoursesById(_id)
             return {
-                status: newModule?.status,
-                message: newModule?.message,
-                data: newModule?.data,
+                status: courses?.status,
+                message: courses?.message,
+                data: courses?.data,
             }
         }else {
             return {
@@ -123,6 +123,26 @@ class courseUsecase {
             }
         }
 
+    }
+
+    async listAllCourses() {
+        console.log('inside course useCase')
+            const courses = await this.courseRepository.getAllCourses()
+            return {
+                status: courses?.status,
+                message: courses?.message,
+                data: courses?.data,
+            }
+    }
+
+    async listBranches(role : string) {
+        console.log('inside course useCase')
+            const branchData = await this.courseRepository.getBranches(role)
+            return {
+                status: branchData?.status,
+                message: branchData?.message,
+                data: branchData?.data,
+            }
     }
 
 }

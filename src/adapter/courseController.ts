@@ -51,7 +51,7 @@ class courseController {
         }
     }
 
-     async addModuleControl(req: Request, res: Response) {
+    async addModuleControl(req: Request, res: Response) {
         try {
             console.log('courseController')
             const Course = await this.courseCase.addModule(req.body)
@@ -62,7 +62,7 @@ class courseController {
         }
     }
 
-     async listCoursesControl(req: Request, res: Response) {
+    async listCoursesControl(req: Request, res: Response) {
         try {
             console.log('courseController')
             const Course = await this.courseCase.listCourses(req.query)
@@ -73,7 +73,32 @@ class courseController {
             return res.status(500).json({ success: false, message: (error as Error).message });
         }
     }
- 
+
+    async listAllCoursesControl(req: Request, res: Response) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.listAllCourses()
+            console.log(Course)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+    async listBranches(req: Request, res: Response, role: string) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.listBranches(role)
+            console.log(Course)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+
 }
 
 export default courseController
