@@ -25,6 +25,7 @@ export interface Branch {
 }
 
 export interface Module {
+    _id?: ObjectId;
     courseId: ObjectId;
     content: string;
     duration: string;

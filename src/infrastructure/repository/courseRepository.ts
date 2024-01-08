@@ -139,20 +139,40 @@ class courseRepository {
 
     async addModule(module: Module) {
         try {
-            console.log('add module')  //test
-            const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId }, { $addToSet: { modules: module } })
-            if (moduleUpdate?.modifiedCount > 0) {
-                console.log("Saved Module =>", moduleUpdate)
-                return {
-                    status: 200,
-                    message: 'New module added',
+            if (module._id) {
+                //edit module scenario
+                console.log('edit module')  //test
+                const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, { $set: { 'modules.$': module } })
+                if (moduleUpdate?.modifiedCount > 0) {
+                    console.log("Updated Module =>", moduleUpdate)  //test
+                    return {
+                        status: 200,
+                        message: 'module updated successfully',
+                    }
+                } else {
+                    return {
+                        status: 400,
+                        message: 'Failed to update module',
+                    }
                 }
             } else {
-                return {
-                    status: 400,
-                    message: 'Failed to add new module',
+                //add module scenario
+                console.log('add module')  //test
+                const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId }, { $addToSet: { modules: module } })
+                if (moduleUpdate?.modifiedCount > 0) {
+                    // console.log("Saved Module =>", moduleUpdate)  //test
+                    return {
+                        status: 200,
+                        message: 'New module added',
+                    }
+                } else {
+                    return {
+                        status: 400,
+                        message: 'Failed to add new module',
+                    }
                 }
             }
+
         } catch (error) {
             return {
                 status: 500,
@@ -293,10 +313,10 @@ class courseRepository {
         }
     }
 
-    async getBranches(role : string) {
+    async getBranches(role: string) {
         try {
             console.log('listBranches')  //test
-            const Branches = role === "user" ? await BranchModel.find({ isBlocked: false }): await BranchModel.find()
+            const Branches = role === "user" ? await BranchModel.find({ isBlocked: false }) : await BranchModel.find()
             if (Branches) {
                 console.log("branches =>", Branches)
                 return {
