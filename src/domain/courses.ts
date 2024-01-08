@@ -2,6 +2,7 @@ import { ObjectId } from "mongoose";
 
 export interface Courses {
     _id: ObjectId;
+    image: string,
     courseId: ObjectId;
     branchId: ObjectId;
     courseName: string;
@@ -10,12 +11,7 @@ export interface Courses {
     isBlocked: boolean;
     tutor?: ObjectId;
     status?: string;
-    modules?: {
-        content: string;
-        duration: string;
-        materials: string;
-        modName: string;
-    }[];
+    modules?: Module[];
     createdAt: Date;
     updatedAt: Date;
 }

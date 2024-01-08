@@ -25,6 +25,9 @@ const CoursesSchema: Schema = new Schema({
         required: true,
         unique: true
     },
+    image: {
+        type: String
+    },
     branchId: {
         type: Schema.Types.ObjectId,
         required: true
