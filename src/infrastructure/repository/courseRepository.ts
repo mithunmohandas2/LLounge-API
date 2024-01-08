@@ -182,6 +182,31 @@ class courseRepository {
         }
     }
 
+    async addMaterials(module: Module) {
+        try {
+            console.log('add materials')  //test
+            const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, { $set: { 'modules.$.materials': module.materials } })
+            if (moduleUpdate?.modifiedCount > 0) {
+                console.log("Updated Module =>", moduleUpdate)  //test
+                return {
+                    status: 200,
+                    message: 'materials added successfully',
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to add materials',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
     async editCourse(course: Courses) {
         try {
             console.log('edit course')  //test

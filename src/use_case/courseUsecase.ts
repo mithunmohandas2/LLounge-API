@@ -97,6 +97,24 @@ class courseUsecase {
         }
     }
 
+    async addMaterials(module: Module) {
+        console.log('inside course useCase')
+        if (!module?.courseId || !module?.materials || !module?._id) return {
+            status: 400,
+            message: 'Missing required fields',
+        }
+        const isValid = await this.courseRepository.findCourseById(module.courseId)
+        if (isValid.status !== 200) return {
+            status: 400,
+            message: 'Course not found',
+        }
+        const editModule = await this.courseRepository.addMaterials(module)
+        return {
+            status: editModule?.status,
+            message: editModule?.message,
+        }
+    }
+
     async listCourses(query: ParsedQs) {
         console.log('inside course useCase')
         // Check if query.tutorId exists and is a string

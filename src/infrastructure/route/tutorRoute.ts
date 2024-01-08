@@ -15,6 +15,7 @@ router.post('/createCourse',tutorJwtAuth, (req, res) => courseControl.createCour
 router.put('/editCourse',tutorJwtAuth, (req, res) => courseControl.editCourseControl(req, res));
 router.put('/blockCourse',tutorJwtAuth, (req, res) => courseControl.blockCourseControl(req, res));
 router.put('/addModule',tutorJwtAuth, (req, res) => courseControl.addModuleControl(req, res));
+router.put('/addMaterials',tutorJwtAuth, (req, res) => courseControl.addMaterialsControl(req, res));
 router.get('/courses',tutorJwtAuth, (req, res) => courseControl.listCoursesControl(req, res));
 
 export default router

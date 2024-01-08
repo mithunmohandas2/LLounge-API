@@ -62,6 +62,17 @@ class courseController {
         }
     }
 
+    async addMaterialsControl(req: Request, res: Response) {
+        try {
+            console.log('courseController')
+            const Course = await this.courseCase.addMaterials(req.body)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
     async listCoursesControl(req: Request, res: Response) {
         try {
             console.log('courseController')
