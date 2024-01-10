@@ -265,6 +265,32 @@ class courseRepository {
         }
     }
 
+    async publishCourse(_id: ObjectId) {
+        try {
+            // console.log('course publish')  //test
+            const statusChange = await CourseModel.updateOne({ _id }, { $set: { status: "Active" } })
+            if (statusChange) {
+                // console.log("Publish Status =>", statusChange)   //test
+                return {
+                    status: 200,
+                    message: "Course Published",
+                    data: statusChange,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to publish course',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
     async sendApproval(_id: ObjectId) {
         try {
             // console.log('Sending Approval')  //test
@@ -317,9 +343,36 @@ class courseRepository {
         }
     }
 
+    async getAllCoursesForUser() {
+        try { //for user
+            console.log('listCourses User')  //test
+            const draftCourses = await CourseModel.find().populate('branchId')
+            const allCourses = draftCourses.filter((course) => course.status === 'Active')
+            if (allCourses) {
+                // console.log("Courses User =>", allCourses)  //test
+                return {
+                    status: 200,
+                    message: "Course list",
+                    data: allCourses,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to fetch courses',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
     async getAllCourses() {
         try { //for admin
-            console.log('listCourses Admin')  //test
+            // console.log('listCourses Admin')  //test
             const draftCourses = await CourseModel.find().populate('branchId')
             const allCourses = draftCourses.filter((course) => course.status !== 'draft')
             if (allCourses) {

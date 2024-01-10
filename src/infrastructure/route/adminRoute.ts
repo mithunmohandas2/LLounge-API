@@ -23,6 +23,7 @@ router.post('/blockUser',adminJwtAuth, (req, res) => adminControl.userBlockContr
 router.post('/createBranch',adminJwtAuth, (req, res) => courseControl.createBranchControl(req, res));
 router.get('/courses',adminJwtAuth, (req, res) => courseControl.listAllCoursesControl(req, res));
 router.put('/blockCourse',adminJwtAuth, (req, res) => courseControl.blockCourseControl(req, res));
+router.put('/publishCourse',adminJwtAuth, (req, res) => courseControl.publishCourseControl(req, res));
 router.put('/courseStatusUpdate',adminJwtAuth, (req, res) => courseControl.requestCourseEditControl(req, res));
 
 

@@ -63,7 +63,7 @@ class courseUsecase {
     }
 
     async blockCourse(course: Courses) {
-        console.log('inside edit course useCase')
+        // console.log('inside block course useCase') //test
         //check for duplicates
         const isValid = await this.courseRepository.findCourseById(course?.courseId)
         if (!isValid.data) return {
@@ -77,6 +77,21 @@ class courseUsecase {
         }
     }
 
+    async publishCourse(course: Courses) {
+        // console.log('inside publish course useCase') // test
+        //check for duplicates
+        const isValid = await this.courseRepository.findCourseById(course?.courseId)
+        if (!isValid.data) return {
+            status: 400,
+            message: 'Course not found',
+        }
+        const isPublished = await this.courseRepository.publishCourse(course?.courseId)
+        return {
+            status: isPublished?.status,
+            message: isPublished?.message,
+        }
+    }
+
     async requestApproval(course: Courses) {
         console.log('inside edit course useCase')
         //check for duplicates
@@ -85,10 +100,10 @@ class courseUsecase {
             status: 400,
             message: 'Course not found',
         }
-        const Blocked = await this.courseRepository.sendApproval(course?.courseId)
+        const isChanged = await this.courseRepository.sendApproval(course?.courseId)
         return {
-            status: Blocked?.status,
-            message: Blocked?.message,
+            status: isChanged?.status,
+            message: isChanged?.message,
         }
     }
 
@@ -166,6 +181,15 @@ class courseUsecase {
             }
         }
 
+    }
+
+    async listCoursesForUser() {
+            const courses = await this.courseRepository.getAllCoursesForUser()
+            return {
+                status: courses?.status,
+                message: courses?.message,
+                data: courses?.data,
+            }
     }
 
     async listAllCourses() {

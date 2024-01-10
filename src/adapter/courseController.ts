@@ -47,6 +47,16 @@ class courseController {
         }
     }
 
+    async publishCourseControl(req: Request, res: Response) {
+        try {
+            const Course = await this.courseCase.publishCourse(req.body)
+            res.status(Course?.status).json(Course)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
     async requestApprovalControl(req: Request, res: Response) {
         try {
             const Course = await this.courseCase.requestApproval(req.body)
@@ -89,9 +99,15 @@ class courseController {
 
     async listCoursesControl(req: Request, res: Response) {
         try {
-            const Course = await this.courseCase.listCourses(req.query)
-            // console.log(Course) //test
-            res.status(Course?.status).json(Course)
+            if (!req?.query?.tutorId && !req?.query?._id) {
+                const Course = await this.courseCase.listCoursesForUser()
+                // console.log(Course) //test
+                res.status(Course?.status).json(Course)
+            } else {
+                const Course = await this.courseCase.listCourses(req.query)
+                // console.log(Course) //test
+                res.status(Course?.status).json(Course)
+            }
         } catch (error) {
             console.log(error)
             return res.status(500).json({ success: false, message: (error as Error).message });
