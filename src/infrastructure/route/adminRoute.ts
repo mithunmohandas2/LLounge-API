@@ -23,6 +23,6 @@ router.post('/blockUser',adminJwtAuth, (req, res) => adminControl.userBlockContr
 router.post('/createBranch',adminJwtAuth, (req, res) => courseControl.createBranchControl(req, res));
 router.get('/courses',adminJwtAuth, (req, res) => courseControl.listAllCoursesControl(req, res));
 router.put('/blockCourse',adminJwtAuth, (req, res) => courseControl.blockCourseControl(req, res));
-router.get('/branches',adminJwtAuth, (req, res) => courseControl.listBranches(req, res, role));
+// router.get('/branches',adminJwtAuth, (req, res) => courseControl.listBranches(req, res, role));
 
 export default router

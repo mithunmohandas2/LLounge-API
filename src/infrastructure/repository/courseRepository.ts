@@ -86,7 +86,7 @@ class courseRepository {
     async findCourseById(_id: ObjectId) {
         try {
             console.log('Check existing course by ID')  //test
-            const isExists = await CourseModel.findOne({ _id })
+            const isExists = await CourseModel.findOne({ _id }).populate('branchId').populate('tutor')
             if (isExists) {
                 return {
                     status: 200,
@@ -142,7 +142,13 @@ class courseRepository {
             if (module._id) {
                 //edit module scenario
                 console.log('edit module')  //test
-                const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, { $set: { 'modules.$': module } })
+                const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, {
+                    $set: {
+                        'modules.$.modName': module.modName,
+                        'modules.$.content': module.content,
+                        'modules.$.duration': module.duration,
+                    }
+                })
                 if (moduleUpdate?.modifiedCount > 0) {
                     console.log("Updated Module =>", moduleUpdate)  //test
                     return {
@@ -262,7 +268,7 @@ class courseRepository {
     async getAllCourses() {
         try {
             console.log('listCourses')  //test
-            const allCourses = await CourseModel.find()
+            const allCourses = await CourseModel.find().populate('branchId')
             if (allCourses) {
                 console.log("Courses =>", allCourses)
                 return {
@@ -289,7 +295,7 @@ class courseRepository {
     async listCoursesById(_id: ObjectId) {
         try {
             console.log('Course Details')  //test
-            const courseData = await CourseModel.findOne({ _id })
+            const courseData = await CourseModel.findOne({ _id }).populate('branchId').populate('tutor')
             if (courseData) {
                 console.log("Courses =>", courseData)
                 return {
@@ -315,7 +321,7 @@ class courseRepository {
     async listCoursesByTutor(tutorId: ObjectId) {
         try {
             console.log('listCourses')  //test
-            const allCourses = await CourseModel.find({ tutor: tutorId })
+            const allCourses = await CourseModel.find({ tutor: tutorId }).populate('branchId').populate('tutor')
             if (allCourses) {
                 console.log("Courses =>", allCourses)
                 return {

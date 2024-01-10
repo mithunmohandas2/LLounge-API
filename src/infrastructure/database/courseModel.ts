@@ -30,6 +30,7 @@ const CoursesSchema: Schema = new Schema({
     },
     branchId: {
         type: Schema.Types.ObjectId,
+        ref: 'branch',
         required: true
     },
     description: {
@@ -45,6 +46,7 @@ const CoursesSchema: Schema = new Schema({
     },
     tutor: {
         type: Schema.Types.ObjectId,
+        ref: 'user',
     },
     status: {
         type: String,

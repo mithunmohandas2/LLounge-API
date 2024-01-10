@@ -24,5 +24,6 @@ router.post('/verifyOTP', (req, res) => controller.verifyOTP(req, res));
 router.post('/tokenDecode', (req, res) => controller.tokenDecode(req, res));
 router.get('/branches', (req, res) => courseControl.listBranches(req, res, role));
 router.get('/courses', (req, res) => courseControl.listCoursesControl(req, res));
+router.get('/branches', (req, res) => courseControl.listBranches(req, res, role));
 
 export default router
