@@ -18,7 +18,6 @@ class Userusecase {
     }
 
     async register(user: User) {
-        console.log('inside useCase')
         const emailFound = await this.userRepository.findByEmail(user.email)
         const phoneFound = await this.userRepository.findByPhone(user.phone)
         if (emailFound?.success || phoneFound?.success) {
@@ -41,7 +40,6 @@ class Userusecase {
 
 
     async signIn(user: User) {
-        console.log('inside useCase')
         const userFound = await this.userRepository.findByEmail(user.email)
         if (userFound) {
             if (userFound.data.isBlocked) {
@@ -76,7 +74,6 @@ class Userusecase {
     }
 
     async sendOTP(user: User) {
-        console.log('inside useCase')
         const userFound = await this.userRepository.findByEmail(user.email)
         if (!userFound) {         //unregistered user
             return {
@@ -106,7 +103,6 @@ class Userusecase {
     }
 
     async tokenDecode(data: { token: string }) {
-        console.log('inside useCase')
         if (!data.token) return {
             status: 401,
             message: 'Token misssing, Please login again',
@@ -114,7 +110,7 @@ class Userusecase {
         const response = await tokenService.verifyToken(data.token)
         const _id = response?.data?.userData
         const User = await adminrepository.findById(_id)
-        console.log(User)
+        // console.log(User)  //test
         return {
             status: 200,
             message: User.message,

@@ -50,7 +50,7 @@ const CoursesSchema: Schema = new Schema({
     },
     status: {
         type: String,
-        enum: ['editRequested', 'forApproval', 'draft'],
+        enum: ['Edit Requested', 'Sent for approval', 'draft', 'Active'],
         default: 'draft',
     },
     modules: [{

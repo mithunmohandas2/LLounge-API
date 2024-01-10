@@ -48,7 +48,6 @@ class userController {
 
     async signIn(req: Request, res: Response) {
         try {
-            console.log('userController')
             const user = await this.usercase.signIn(req.body)
             res.status(user.status).json(user)
         } catch (error) {
@@ -59,7 +58,6 @@ class userController {
 
     async sendOTP(req: Request, res: Response) {
         try {
-            console.log('userController')
             const response = await this.usercase.sendOTP(req.body)
             res.status(response.status).json(response)
         } catch (error) {
@@ -70,7 +68,6 @@ class userController {
 
     async verifyOTP(req: Request, res: Response) {
         try {
-            console.log('userController')
             const response = await this.usercase.verifyOTP(req.body)
             res.status(response.status).json(response)
         } catch (error) {
@@ -81,7 +78,7 @@ class userController {
 
     async tokenDecode(req: Request, res: Response) {
         try {
-            console.log('userController')
+            // console.log('userController')   //test
             const response = await this.usercase.tokenDecode(req.body)
             res.status(response.status).json(response)
         } catch (error) {

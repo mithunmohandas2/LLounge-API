@@ -5,7 +5,7 @@ class adminRepository {
 
     async findAllByRole(userType: string) {
         try {
-            console.log('find all user/tutors')
+            // console.log('find all user/tutors')  //test
             const userData = await UserModel.find({ role: userType })
             if (userData) {
                 return {
@@ -31,7 +31,7 @@ class adminRepository {
 
     async findAndBlock(_id: ObjectId) {
         try {
-            console.log('find all user/tutors')
+            // console.log('find all user/tutors')    //test
             const userData = await this.findById(_id)   //check if valid user 
             if (!userData.success) {
                 return {
@@ -64,7 +64,7 @@ class adminRepository {
 
     async findById(_id: ObjectId) {
         try {
-            console.log('User exist check by ID')
+            // console.log('User exist check by ID')   //test
             const existingUser = await UserModel.findOne({ _id })
             if (existingUser) {
                 return {

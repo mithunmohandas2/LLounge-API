@@ -7,7 +7,7 @@ class courseRepository {
 
     async findBranchByName(branchName: string) {
         try {
-            console.log('Check existing branch')  //test
+            // console.log('Check existing branch')  //test
             const isExists = await BranchModel.findOne({ branchName })
             if (isExists) {
                 return {
@@ -59,7 +59,7 @@ class courseRepository {
 
     async findCourseByName(courseName: string) {
         try {
-            console.log('Check existing coursename')  //test
+            // console.log('Check existing coursename')  //test
             const isExists = await CourseModel.findOne({ courseName })
             if (isExists) {
                 return {
@@ -85,7 +85,7 @@ class courseRepository {
 
     async findCourseById(_id: ObjectId) {
         try {
-            console.log('Check existing course by ID')  //test
+            // console.log('Check existing course by ID')  //test
             const isExists = await CourseModel.findOne({ _id }).populate('branchId').populate('tutor')
             if (isExists) {
                 return {
@@ -112,7 +112,7 @@ class courseRepository {
 
     async createCourse(course: Courses) {
         try {
-            console.log('create course')  //test
+            // console.log('create course')  //test
             const newCourse = new CourseModel(course)
             const courseSave = await newCourse.save()
             if (courseSave) {
@@ -141,7 +141,7 @@ class courseRepository {
         try {
             if (module._id) {
                 //edit module scenario
-                console.log('edit module')  //test
+                // console.log('edit module')  //test
                 const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, {
                     $set: {
                         'modules.$.modName': module.modName,
@@ -163,7 +163,7 @@ class courseRepository {
                 }
             } else {
                 //add module scenario
-                console.log('add module')  //test
+                // console.log('add module')  //test
                 const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId }, { $addToSet: { modules: module } })
                 if (moduleUpdate?.modifiedCount > 0) {
                     // console.log("Saved Module =>", moduleUpdate)  //test
@@ -190,7 +190,7 @@ class courseRepository {
 
     async addMaterials(module: Module) {
         try {
-            console.log('add materials')  //test
+            // console.log('add materials')  //test
             const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, { $set: { 'modules.$.materials': module.materials } })
             if (moduleUpdate?.modifiedCount > 0) {
                 console.log("Updated Module =>", moduleUpdate)  //test
@@ -215,7 +215,7 @@ class courseRepository {
 
     async editCourse(course: Courses) {
         try {
-            console.log('edit course')  //test
+            // console.log('edit course')  //test
             const editedCourse = await CourseModel.updateOne({ _id: course.courseId }, { $set: course })
             if (editedCourse) {
                 console.log("saved Course =>", editedCourse)
@@ -241,7 +241,7 @@ class courseRepository {
 
     async blockCourse(_id: ObjectId, blockStatus: Boolean) {
         try {
-            console.log('block/unblock course')  //test
+            // console.log('block/unblock course')  //test
             const statusChange = await CourseModel.updateOne({ _id }, { $set: { isBlocked: blockStatus ? false : true } })
             if (statusChange) {
                 console.log("blocked Course =>", statusChange)
@@ -265,12 +265,65 @@ class courseRepository {
         }
     }
 
-    async getAllCourses() {
+    async sendApproval(_id: ObjectId) {
         try {
-            console.log('listCourses')  //test
-            const allCourses = await CourseModel.find().populate('branchId')
+            // console.log('Sending Approval')  //test
+            const statusChange = await CourseModel.updateOne({ _id }, { $set: { status: "Sent for approval" } })
+            if (statusChange) {
+                // console.log("Approval Status =>", statusChange)   //test
+                return {
+                    status: 200,
+                    message: "Sent approval for activation",
+                    data: statusChange,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to send approval',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async RequestEdit(_id: ObjectId) {
+        try {
+            console.log('Sending Edit Request')  //test
+            const statusChange = await CourseModel.updateOne({ _id }, { $set: { status: "Edit Requested" } })
+            if (statusChange) {
+                console.log("Edit Requested Status =>", statusChange)
+                return {
+                    status: 200,
+                    message: "Sent Edit Request",
+                    data: statusChange,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to send approval',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async getAllCourses() {
+        try { //for admin
+            console.log('listCourses Admin')  //test
+            const draftCourses = await CourseModel.find().populate('branchId')
+            const allCourses = draftCourses.filter((course) => course.status !== 'draft')
             if (allCourses) {
-                console.log("Courses =>", allCourses)
+                // console.log("Courses Admin =>", allCourses)  //test
                 return {
                     status: 200,
                     message: "Course list",
@@ -294,7 +347,7 @@ class courseRepository {
 
     async listCoursesById(_id: ObjectId) {
         try {
-            console.log('Course Details')  //test
+            // console.log('Course Details')  //test
             const courseData = await CourseModel.findOne({ _id }).populate('branchId').populate('tutor')
             if (courseData) {
                 console.log("Courses =>", courseData)
@@ -320,7 +373,7 @@ class courseRepository {
 
     async listCoursesByTutor(tutorId: ObjectId) {
         try {
-            console.log('listCourses')  //test
+            // console.log('listCourses')  //test
             const allCourses = await CourseModel.find({ tutor: tutorId }).populate('branchId').populate('tutor')
             if (allCourses) {
                 console.log("Courses =>", allCourses)
@@ -346,10 +399,10 @@ class courseRepository {
 
     async getBranches(role: string) {
         try {
-            console.log('listBranches')  //test
+            // console.log('listBranches')  //test
             const Branches = role === "user" ? await BranchModel.find({ isBlocked: false }) : await BranchModel.find()
             if (Branches) {
-                console.log("branches =>", Branches)
+                // console.log("branches =>", Branches)  //test
                 return {
                     status: 200,
                     message: "branches list",

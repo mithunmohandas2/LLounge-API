@@ -10,7 +10,6 @@ class courseUsecase {
     }
 
     async createBranch({ branchName }: Branch) {
-        console.log('inside course useCase')
         if (!branchName) return {
             status: 400,
             message: 'Missing required fields',
@@ -30,7 +29,6 @@ class courseUsecase {
     }
 
     async createCourse(course: Courses) {
-        console.log('inside course useCase')
         if (!course.courseName || !course.fee || !course.branchId) return {
             status: 400,
             message: 'Missing required fields',
@@ -79,8 +77,37 @@ class courseUsecase {
         }
     }
 
+    async requestApproval(course: Courses) {
+        console.log('inside edit course useCase')
+        //check for duplicates
+        const isValid = await this.courseRepository.findCourseById(course?.courseId)
+        if (!isValid.data) return {
+            status: 400,
+            message: 'Course not found',
+        }
+        const Blocked = await this.courseRepository.sendApproval(course?.courseId)
+        return {
+            status: Blocked?.status,
+            message: Blocked?.message,
+        }
+    }
+
+    async requestCourseEdit(course: Courses) {
+        console.log('inside edit course useCase')
+        //check for duplicates
+        const isValid = await this.courseRepository.findCourseById(course?.courseId)
+        if (!isValid.data) return {
+            status: 400,
+            message: 'Course not found',
+        }
+        const Blocked = await this.courseRepository.RequestEdit(course?.courseId)
+        return {
+            status: Blocked?.status,
+            message: Blocked?.message,
+        }
+    }
+
     async addModule(module: Module) {
-        console.log('inside course useCase')
         if (!module?.courseId || !module?.modName || !module?.content || !module?.duration) return {
             status: 400,
             message: 'Missing required fields',
@@ -98,7 +125,6 @@ class courseUsecase {
     }
 
     async addMaterials(module: Module) {
-        console.log('inside course useCase')
         if (!module?.courseId || !module?.materials || !module?._id) return {
             status: 400,
             message: 'Missing required fields',
@@ -116,7 +142,6 @@ class courseUsecase {
     }
 
     async listCourses(query: ParsedQs) {
-        console.log('inside course useCase')
         // Check if query.tutorId exists and is a string
         if (query && query.tutorId && typeof query.tutorId === 'string') {
             const tutorId: ObjectId = query.tutorId as unknown as ObjectId; //string to ObjectID
@@ -144,7 +169,6 @@ class courseUsecase {
     }
 
     async listAllCourses() {
-        console.log('inside course useCase')
             const courses = await this.courseRepository.getAllCourses()
             return {
                 status: courses?.status,
@@ -154,7 +178,6 @@ class courseUsecase {
     }
 
     async listBranches(role : string) {
-        console.log('inside course useCase')
             const branchData = await this.courseRepository.getBranches(role)
             return {
                 status: branchData?.status,
