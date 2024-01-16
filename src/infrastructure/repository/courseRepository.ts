@@ -533,5 +533,29 @@ class courseRepository {
             }
         }
     }
+
+    async assessUserForCourse(userId: ObjectId, courseId: ObjectId, marks: number) {
+        try {
+            console.log('assessment = >', courseId, userId, marks)  //test
+            const assessment = await enrollmentModel.updateOne({ courseId, 'users.userId': userId }, { $set: { 'users.$.marks': marks } });
+            console.log("assessment =>", assessment)
+            if (assessment) return {
+                status: 200,
+                message: 'Assessment completed',
+                data: assessment,
+            }
+            else {
+                return {
+                    status: 200,
+                    message: 'Unable to do Assessment',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                message: (error as Error).message
+            }
+        }
+    }
 }
 export default courseRepository

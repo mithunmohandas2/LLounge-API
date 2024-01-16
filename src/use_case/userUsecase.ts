@@ -128,6 +128,7 @@ class Userusecase {
             status: 401,
             message: 'Missing required informations',
         }
+        
         const response = await notificationsRepo.createNote(data)
         return {
             status: response.status,

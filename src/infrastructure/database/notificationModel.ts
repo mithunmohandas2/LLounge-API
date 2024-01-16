@@ -11,13 +11,22 @@ const notificationSchema: Schema<notifications> = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'user'
     },
+    courseId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'course'
+    },
     message: {
         type: String,
         required: true,
     },
     createdAt: {
         type: Date,
-        default: Date.now()
+        default: new Date()
+    },
+    expiresAt: {
+        type: Date,
+        default: new Date(Date.now() + (20 * 24 * 60 * 60 * 1000)), //auto delete in 20 days
+        index: {expires : 0}
     }
 })
 

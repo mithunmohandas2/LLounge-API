@@ -14,7 +14,7 @@ const enrollmentSchema: Schema<enrollments> = new mongoose.Schema({
             type: mongoose.Types.ObjectId,
             ref: 'user'
         },
-        progress: {
+        marks: {
             type: Number,
             default: 0
         }

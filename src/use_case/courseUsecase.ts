@@ -235,6 +235,20 @@ class courseUsecase {
         }
     }
 
+    async assessUser(data: { userId: string, courseId: string, marks: number }) {
+
+        const userId: ObjectId = data.userId as unknown as ObjectId; //string to ObjectID
+        const courseId: ObjectId = data.courseId as unknown as ObjectId; //string to ObjectID
+        const marks: number = data.marks
+        
+        const enrollData = await this.courseRepository.assessUserForCourse(userId, courseId, marks)
+        return {
+            status: enrollData?.status,
+            message: enrollData?.message,
+            data: enrollData?.data,
+        }
+    }
+
 }
 
 export default courseUsecase

@@ -1,4 +1,5 @@
 // notificationRepository
+import { ObjectId } from 'mongoose';
 import { notifications } from '../../domain/notification';
 import { notificationModel } from '../database/notificationModel';
 import { ParsedQs } from "qs";
@@ -8,11 +9,14 @@ class notificationRepository {
 
     async createNote(data: notifications) {
         try {
-            const newNotification = new notificationModel({
-                senderId: data.senderId,
-                receiverId: data.receiverId,
-                message: data.message
-            })
+            const senderId = data.senderId as unknown as ObjectId; //string to ObjectID
+            const receiverId = data.receiverId as unknown as ObjectId; //string to ObjectID 
+            const courseId = data.courseId as unknown as ObjectId; //string to ObjectID
+            const message = data.message
+
+            console.log("senderId, receiverId, courseId, message =>", senderId, receiverId, courseId, message )
+
+            const newNotification = new notificationModel({ senderId, receiverId, courseId, message })
             const response = await newNotification.save()
             console.log("notification saved? =>", response)
             if (response) {
@@ -38,7 +42,7 @@ class notificationRepository {
 
     async getNotifications(query: ParsedQs) {
         try {
-            const response = await notificationModel.find({ $or: [{ senderId: query._id }, { receiverId: query._id }] })
+            const response = await notificationModel.find({ $or: [{ senderId: query._id }, { receiverId: query._id }, { courseId: query._id }] })
             console.log("notification saved? =>", response)
             if (response) {
                 return {
