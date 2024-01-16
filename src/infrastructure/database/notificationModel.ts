@@ -21,7 +21,7 @@ const notificationSchema: Schema<notifications> = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: new Date()
+        default: Date.now()
     },
     expiresAt: {
         type: Date,

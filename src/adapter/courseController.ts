@@ -114,6 +114,18 @@ class courseController {
         }
     }
 
+    async enrolledUsersControl(req: Request, res: Response) {
+        try {
+            const Users = await this.courseCase.enrolledUsers(req.query)
+            // console.log(Course) //test
+            res.status(Users?.status).json(Users)
+
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
     async listAllCoursesControl(req: Request, res: Response) {
         try {
             const Course = await this.courseCase.listAllCourses()

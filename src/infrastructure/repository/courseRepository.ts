@@ -399,7 +399,6 @@ class courseRepository {
         }
     }
 
-
     async listCoursesById(_id: ObjectId) {
         try {
             // console.log('Course Details')  //test
@@ -420,7 +419,30 @@ class courseRepository {
         } catch (error) {
             return {
                 status: 500,
-                success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async listUsersByCourseId(_id: ObjectId) {
+        try {
+            const usersList = await enrollmentModel.findOne({ courseId: _id }).populate('users.userId')
+            if (usersList) {
+                console.log("UserList =>", usersList)   //test 
+                return {
+                    status: 200,
+                    message: "Enrolled Users Details",
+                    data: usersList,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to fetch enrollment details',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
                 message: (error as Error).message
             }
         }

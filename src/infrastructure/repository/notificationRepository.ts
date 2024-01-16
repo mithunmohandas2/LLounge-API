@@ -14,7 +14,7 @@ class notificationRepository {
             const courseId = data.courseId as unknown as ObjectId; //string to ObjectID
             const message = data.message
 
-            console.log("senderId, receiverId, courseId, message =>", senderId, receiverId, courseId, message )
+            console.log("senderId, receiverId, courseId, message =>", senderId, receiverId, courseId, message)
 
             const newNotification = new notificationModel({ senderId, receiverId, courseId, message })
             const response = await newNotification.save()
@@ -42,8 +42,8 @@ class notificationRepository {
 
     async getNotifications(query: ParsedQs) {
         try {
-            const response = await notificationModel.find({ $or: [{ senderId: query._id }, { receiverId: query._id }, { courseId: query._id }] })
-            console.log("notification saved? =>", response)
+            const response = await notificationModel.find({ $or: [{ senderId: query._id }, { receiverId: query._id }, { courseId: query._id }] }).sort({ createdAt: -1 })
+            // console.log("notification saved? =>", response)   //test
             if (response) {
                 return {
                     status: 200,

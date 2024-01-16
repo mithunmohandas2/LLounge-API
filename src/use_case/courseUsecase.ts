@@ -183,6 +183,24 @@ class courseUsecase {
 
     }
 
+    async enrolledUsers(query: ParsedQs) {
+        if (query && query._id && typeof query._id === 'string') {
+            const _id: ObjectId = query._id as unknown as ObjectId; //string to ObjectID
+            const users = await this.courseRepository.listUsersByCourseId(_id)
+            return {
+                status: users?.status,
+                message: users?.message,
+                data: users?.data,
+            }
+        } else {
+            return {
+                status: 400,
+                message: "Invalid query received"
+            }
+        }
+
+    }
+
     async listCoursesForUser() {
         const courses = await this.courseRepository.getAllCoursesForUser()
         return {

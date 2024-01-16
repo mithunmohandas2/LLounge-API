@@ -13,6 +13,7 @@ const router = express.Router()
 
 router.post('/createCourse',tutorJwtAuth, (req, res) => courseControl.createCourseControl(req, res));
 router.get('/courses',tutorJwtAuth, (req, res) => courseControl.listCoursesControl(req, res));
+router.get('/enrolledUsers',tutorJwtAuth, (req, res) => courseControl.enrolledUsersControl(req, res));
 router.put('/editCourse',tutorJwtAuth, (req, res) => courseControl.editCourseControl(req, res));
 router.put('/blockCourse',tutorJwtAuth, (req, res) => courseControl.blockCourseControl(req, res));
 router.put('/addModule',tutorJwtAuth, (req, res) => courseControl.addModuleControl(req, res));
