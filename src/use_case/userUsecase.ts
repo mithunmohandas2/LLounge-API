@@ -6,10 +6,15 @@ import BcryptPasswordHashingService from '../infrastructure/interface/encryptSer
 import JWTService from "../infrastructure/interface/jwtService";
 import Otp from "../domain/otp";
 import adminRepository from "../infrastructure/repository/adminRepository";
+import { notifications } from "../domain/notification";
+import notificationRepository from "../infrastructure/repository/notificationRepository";
+import { ParsedQs } from "qs";
 
 const encryptService = new BcryptPasswordHashingService();
 const tokenService = new JWTService()
 const adminrepository = new adminRepository()
+const notificationsRepo = new notificationRepository()
+
 
 class Userusecase {
     private userRepository: userRepository
@@ -115,6 +120,28 @@ class Userusecase {
             status: 200,
             message: User.message,
             data: User.data,
+        }
+    }
+
+    async createNotification(data: notifications) {
+        if (!data.senderId || !data.receiverId || !data.message) return {
+            status: 401,
+            message: 'Missing required informations',
+        }
+        const response = await notificationsRepo.createNote(data)
+        return {
+            status: response.status,
+            message: response.message,
+            data: response?.data
+        }
+    }
+
+    async getNotifications(query: ParsedQs) {
+        const response = await notificationsRepo.getNotifications(query)
+        return {
+            status: response.status,
+            message: response.message,
+            data: response?.data
         }
     }
 

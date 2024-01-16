@@ -34,3 +34,10 @@ export interface Module {
 }
 
 
+export interface enrollments {
+    courseId: ObjectId;
+    users: {
+        userId: ObjectId,
+        progress: number,
+    }[]
+}

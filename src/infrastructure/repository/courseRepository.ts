@@ -2,6 +2,8 @@ import { ObjectId } from "mongoose"
 import BranchModel from "../database/branchModel";
 import CourseModel from "../database/courseModel";
 import { Courses, Module } from "../../domain/courses";
+import { UserModel } from "../database/userModel";
+import { enrollmentModel } from "../database/enrollmentModel";
 
 class courseRepository {
 
@@ -403,7 +405,7 @@ class courseRepository {
             // console.log('Course Details')  //test
             const courseData = await CourseModel.findOne({ _id }).populate('branchId').populate('tutor')
             if (courseData) {
-                console.log("Courses =>", courseData)
+                // console.log("Courses =>", courseData)   //test 
                 return {
                     status: 200,
                     message: "Course Details",
@@ -429,7 +431,7 @@ class courseRepository {
             // console.log('listCourses')  //test
             const allCourses = await CourseModel.find({ tutor: tutorId }).populate('branchId').populate('tutor')
             if (allCourses) {
-                console.log("Courses =>", allCourses)
+                // console.log("Courses =>", allCourses)  //test
                 return {
                     status: 200,
                     message: "Course list",
@@ -471,6 +473,62 @@ class courseRepository {
             return {
                 status: 500,
                 success: false,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async courseEnrollment(userId: ObjectId, courseId: ObjectId) {
+        try {
+            console.log('courseEnrollment')  //test
+            const duplicateCheck = await this.enrollmentCheck(userId, courseId)
+            console.log("duplicateCheck =>", duplicateCheck)
+            if (duplicateCheck?.message === 'Enrolled for course') return {
+                status: 400,
+                message: 'Already enrolled for course',
+            }
+
+            const enrollment = await enrollmentModel.updateOne({ courseId }, { $addToSet: { users: { userId: userId, progress: 0 } } }, { upsert: true })
+            console.log('courseEnrollment = >', enrollment)  //test
+            if (enrollment?.modifiedCount > 0 || enrollment?.upsertedCount > 0) {
+                return {
+                    status: 200,
+                    message: "enrollment list",
+                    data: enrollment,
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: 'Failed to enroll for course',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async enrollmentCheck(userId: ObjectId, courseId: ObjectId) {
+        try {
+            console.log('courseEnrollmentCheck = >', courseId)  //test
+            const isEnrolled = await enrollmentModel.findOne({ courseId, 'users.userId': userId });
+            console.log("isEnrolled =>", isEnrolled)
+            if (isEnrolled) return {
+                status: 200,
+                message: 'Enrolled for course',
+                data: isEnrolled,
+            }
+            else {
+                return {
+                    status: 200,
+                    message: 'Not enrolled for course',
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
                 message: (error as Error).message
             }
         }

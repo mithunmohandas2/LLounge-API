@@ -69,14 +69,7 @@ const userSchema: Schema<User> = new mongoose.Schema({
         country: { type: String },
         pincode: { type: String }
     },
-    enrolls: [{
-        courseId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'Course'
-        },
-        Progress: { type: mongoose.Types.Decimal128 },
-    }],
-    createdAt: {
+      createdAt: {
         type: Date,
         default: new Date()
     }

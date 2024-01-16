@@ -166,7 +166,7 @@ class courseUsecase {
                 message: courses?.message,
                 data: courses?.data,
             }
-        } else if(query && query._id && typeof query._id === 'string'){
+        } else if (query && query._id && typeof query._id === 'string') {
             const _id: ObjectId = query._id as unknown as ObjectId; //string to ObjectID
             const courses = await this.courseRepository.listCoursesById(_id)
             return {
@@ -174,7 +174,7 @@ class courseUsecase {
                 message: courses?.message,
                 data: courses?.data,
             }
-        }else {
+        } else {
             return {
                 status: 400,
                 message: "Invalid query received"
@@ -184,30 +184,55 @@ class courseUsecase {
     }
 
     async listCoursesForUser() {
-            const courses = await this.courseRepository.getAllCoursesForUser()
-            return {
-                status: courses?.status,
-                message: courses?.message,
-                data: courses?.data,
-            }
+        const courses = await this.courseRepository.getAllCoursesForUser()
+        return {
+            status: courses?.status,
+            message: courses?.message,
+            data: courses?.data,
+        }
     }
 
     async listAllCourses() {
-            const courses = await this.courseRepository.getAllCourses()
-            return {
-                status: courses?.status,
-                message: courses?.message,
-                data: courses?.data,
-            }
+        const courses = await this.courseRepository.getAllCourses()
+        return {
+            status: courses?.status,
+            message: courses?.message,
+            data: courses?.data,
+        }
     }
 
-    async listBranches(role : string) {
-            const branchData = await this.courseRepository.getBranches(role)
-            return {
-                status: branchData?.status,
-                message: branchData?.message,
-                data: branchData?.data,
-            }
+    async listBranches(role: string) {
+        const branchData = await this.courseRepository.getBranches(role)
+        return {
+            status: branchData?.status,
+            message: branchData?.message,
+            data: branchData?.data,
+        }
+    }
+
+    async courseEnroll(data: { userId: string, courseId: string }) {
+        const userId: ObjectId = data.userId as unknown as ObjectId; //string to ObjectID
+        const courseId: ObjectId = data.courseId as unknown as ObjectId; //string to ObjectID
+
+        const enrollData = await this.courseRepository.courseEnrollment(userId, courseId)
+        return {
+            status: enrollData?.status,
+            message: enrollData?.message,
+            data: enrollData?.data,
+        }
+    }
+
+    async enrollCheck(data: { userId: string, courseId: string }) {
+
+        const userId: ObjectId = data.userId as unknown as ObjectId; //string to ObjectID
+        const courseId: ObjectId = data.courseId as unknown as ObjectId; //string to ObjectID
+
+        const enrollData = await this.courseRepository.enrollmentCheck(userId, courseId)
+        return {
+            status: enrollData?.status,
+            message: enrollData?.message,
+            data: enrollData?.data,
+        }
     }
 
 }

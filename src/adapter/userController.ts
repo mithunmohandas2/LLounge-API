@@ -87,6 +87,28 @@ class userController {
         }
     }
 
+    async createNotification(req: Request, res: Response) {
+        try {
+            // console.log('userController')   //test
+            const response = await this.usercase.createNotification(req.body)
+            res.status(response.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+    async getNotification(req: Request, res: Response) {
+        try {
+            if (!req?.query?._id) return res.status(401).json({ success: false, message: 'missing query' });
+            const response = await this.usercase.getNotifications(req.query)
+            res.status(response.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
 
 }
 
