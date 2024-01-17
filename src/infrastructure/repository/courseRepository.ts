@@ -436,8 +436,8 @@ class courseRepository {
                 }
             } else {
                 return {
-                    status: 400,
-                    message: 'Failed to fetch enrollment details',
+                    status: 200,
+                    message: 'No enrolled Users',
                 }
             }
         } catch (error) {
