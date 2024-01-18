@@ -169,7 +169,7 @@ class courseController {
             return res.status(500).json({ success: false, message: (error as Error).message });
         }
     }
-
+    
     async assessUserControl(req: Request, res: Response) {
         try {
             const response = await this.courseCase.assessUser(req.body)
@@ -181,6 +181,27 @@ class courseController {
         }
     }
 
+    async feedbackControl(req: Request, res: Response) {
+        try {
+            const response = await this.courseCase.setFeedback(req.body)
+            // console.log(Course)    //test
+            res.status(response?.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+    async feedbackGetControl(req: Request, res: Response) {
+        try {
+            const response = await this.courseCase.getFeedback(req.query)
+            // console.log(Course)    //test
+            res.status(response?.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
 
 }
 

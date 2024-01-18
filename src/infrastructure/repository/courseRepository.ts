@@ -2,8 +2,8 @@ import { ObjectId } from "mongoose"
 import BranchModel from "../database/branchModel";
 import CourseModel from "../database/courseModel";
 import { Courses, Module } from "../../domain/courses";
-import { UserModel } from "../database/userModel";
 import { enrollmentModel } from "../database/enrollmentModel";
+import { feedbackModel } from "../database/feedbackModel";
 
 class courseRepository {
 
@@ -118,7 +118,7 @@ class courseRepository {
             const newCourse = new CourseModel(course)
             const courseSave = await newCourse.save()
             if (courseSave) {
-                console.log("saved Course =>", courseSave)
+                // console.log("saved Course =>", courseSave)  //test
                 return {
                     status: 200,
                     message: 'New course added',
@@ -152,7 +152,7 @@ class courseRepository {
                     }
                 })
                 if (moduleUpdate?.modifiedCount > 0) {
-                    console.log("Updated Module =>", moduleUpdate)  //test
+                    // console.log("Updated Module =>", moduleUpdate)  //test
                     return {
                         status: 200,
                         message: 'module updated successfully',
@@ -195,7 +195,7 @@ class courseRepository {
             // console.log('add materials')  //test
             const moduleUpdate = await CourseModel.updateOne({ _id: module.courseId, 'modules._id': module._id }, { $set: { 'modules.$.materials': module.materials } })
             if (moduleUpdate?.modifiedCount > 0) {
-                console.log("Updated Module =>", moduleUpdate)  //test
+                // console.log("Updated Module =>", moduleUpdate)  //test
                 return {
                     status: 200,
                     message: 'materials added successfully',
@@ -220,7 +220,7 @@ class courseRepository {
             // console.log('edit course')  //test
             const editedCourse = await CourseModel.updateOne({ _id: course.courseId }, { $set: course })
             if (editedCourse) {
-                console.log("saved Course =>", editedCourse)
+                // console.log("saved Course =>", editedCourse)   //test
                 return {
                     status: 200,
                     message: 'Course edited successfully',
@@ -246,7 +246,7 @@ class courseRepository {
             // console.log('block/unblock course')  //test
             const statusChange = await CourseModel.updateOne({ _id }, { $set: { isBlocked: blockStatus ? false : true } })
             if (statusChange) {
-                console.log("blocked Course =>", statusChange)
+                // console.log("blocked Course =>", statusChange)  //test 
                 return {
                     status: 200,
                     message: blockStatus ? 'Course unblocked successfully' : "Course blocked successfully",
@@ -321,10 +321,10 @@ class courseRepository {
 
     async RequestEdit(_id: ObjectId) {
         try {
-            console.log('Sending Edit Request')  //test
+            // console.log('Sending Edit Request')  //test
             const statusChange = await CourseModel.updateOne({ _id }, { $set: { status: "Edit Requested" } })
             if (statusChange) {
-                console.log("Edit Requested Status =>", statusChange)
+                // console.log("Edit Requested Status =>", statusChange)   //test
                 return {
                     status: 200,
                     message: "Sent Edit Request",
@@ -347,7 +347,7 @@ class courseRepository {
 
     async getAllCoursesForUser() {
         try { //for user
-            console.log('listCourses User')  //test
+            // console.log('listCourses User')  //test
             const draftCourses = await CourseModel.find().populate('branchId')
             const allCourses = draftCourses.filter((course) => course.status === 'Active')
             if (allCourses) {
@@ -428,7 +428,7 @@ class courseRepository {
         try {
             const usersList = await enrollmentModel.findOne({ courseId: _id }).populate('users.userId')
             if (usersList) {
-                console.log("UserList =>", usersList)   //test 
+                // console.log("UserList =>", usersList)   //test 
                 return {
                     status: 200,
                     message: "Enrolled Users Details",
@@ -502,27 +502,19 @@ class courseRepository {
 
     async courseEnrollment(userId: ObjectId, courseId: ObjectId) {
         try {
-            console.log('courseEnrollment')  //test
-            const duplicateCheck = await this.enrollmentCheck(userId, courseId)
-            console.log("duplicateCheck =>", duplicateCheck)
+            const duplicateCheck = await this.enrollmentCheck(userId, courseId)  //Check if already enrolled
+            // console.log("duplicateCheck =>", duplicateCheck)  //test
             if (duplicateCheck?.message === 'Enrolled for course') return {
                 status: 400,
                 message: 'Already enrolled for course',
             }
 
             const enrollment = await enrollmentModel.updateOne({ courseId }, { $addToSet: { users: { userId: userId, progress: 0 } } }, { upsert: true })
-            console.log('courseEnrollment = >', enrollment)  //test
-            if (enrollment?.modifiedCount > 0 || enrollment?.upsertedCount > 0) {
-                return {
-                    status: 200,
-                    message: "enrollment list",
-                    data: enrollment,
-                }
-            } else {
-                return {
-                    status: 400,
-                    message: 'Failed to enroll for course',
-                }
+            // console.log('courseEnrollment = >', enrollment)  //test
+            return {
+                status: 200,
+                message: "Successfully enrolled",
+                data: enrollment,
             }
         } catch (error) {
             return {
@@ -534,9 +526,8 @@ class courseRepository {
 
     async enrollmentCheck(userId: ObjectId, courseId: ObjectId) {
         try {
-            console.log('courseEnrollmentCheck = >', courseId)  //test
             const isEnrolled = await enrollmentModel.findOne({ courseId, 'users.userId': userId });
-            console.log("isEnrolled =>", isEnrolled)
+            // console.log("isEnrolled =>", isEnrolled)  //test
             if (isEnrolled) return {
                 status: 200,
                 message: 'Enrolled for course',
@@ -558,9 +549,9 @@ class courseRepository {
 
     async assessUserForCourse(userId: ObjectId, courseId: ObjectId, marks: number) {
         try {
-            console.log('assessment = >', courseId, userId, marks)  //test
+            // console.log('assessment = >', courseId, userId, marks)  //test
             const assessment = await enrollmentModel.updateOne({ courseId, 'users.userId': userId }, { $set: { 'users.$.marks': marks } });
-            console.log("assessment =>", assessment)
+            // console.log("assessment =>", assessment)  //test
             if (assessment) return {
                 status: 200,
                 message: 'Assessment completed',
@@ -579,5 +570,66 @@ class courseRepository {
             }
         }
     }
+
+    async setFeedbackForCourse({ rating, review, userId, courseId }: { userId: ObjectId, courseId: ObjectId, rating: number, review: string }) {
+        try {
+            const duplicate = await feedbackModel.findOne({ courseId, 'userFeedback.userId': userId })
+            if (!duplicate) {
+                const feedback = await feedbackModel.updateOne({ courseId }, { $set: { userFeedback: { userId, review, rating } } }, { upsert: true }
+                );
+                // console.log('coursefeedback = >', feedback)  //test
+                if (feedback?.modifiedCount > 0 || feedback?.upsertedCount > 0) {
+                    return {
+                        status: 200,
+                        message: "feedback added successfully",
+                        data: feedback,
+                    }
+                } else {
+                    return {
+                        status: 400,
+                        message: 'Failed to add feedback',
+                    }
+                }
+            } else {
+                const feedback = await feedbackModel.updateOne({ courseId, 'userFeedback.userId': userId }, {
+                    $set: {
+                        'userFeedback.$.rating': rating,
+                        'userFeedback.$.review': review,
+                        createdAt: Date.now()
+                    },
+                }, { upsert: true }
+                );
+                // console.log('coursefeedback = >', feedback)  //test
+                return {
+                    status: 200,
+                    message: "feedback updated successfully",
+                    data: feedback,
+                }
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                message: (error as Error).message
+            }
+        }
+    }
+
+    async getFeedbackForCourse(courseId: ObjectId) {
+        try {
+            const feedbackData = await feedbackModel.findOne({ courseId }).populate('userFeedback.userId').sort({ createdAt: -1 })
+            // console.log("feedback =>", feedbackData)   //test 
+            return {
+                status: 200,
+                message: "Course feedback Details",
+                data: feedbackData,
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                message: (error as Error).message
+            }
+        }
+    }
 }
+
 export default courseRepository

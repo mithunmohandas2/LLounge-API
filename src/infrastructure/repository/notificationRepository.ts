@@ -14,11 +14,9 @@ class notificationRepository {
             const courseId = data.courseId as unknown as ObjectId; //string to ObjectID
             const message = data.message
 
-            console.log("senderId, receiverId, courseId, message =>", senderId, receiverId, courseId, message)
-
             const newNotification = new notificationModel({ senderId, receiverId, courseId, message })
             const response = await newNotification.save()
-            console.log("notification saved? =>", response)
+            // console.log("notification saved? =>", response) //test
             if (response) {
                 return {
                     status: 200,

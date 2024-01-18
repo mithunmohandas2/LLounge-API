@@ -267,6 +267,37 @@ class courseUsecase {
         }
     }
 
+    async setFeedback(data: { userId: string, courseId: string, rating: number, review: string }) {
+        const userId: ObjectId = data.userId as unknown as ObjectId; //string to ObjectID
+        const courseId: ObjectId = data.courseId as unknown as ObjectId; //string to ObjectID
+        const rating: number = data.rating
+        const review: string = data.review
+        
+        const feedbackData = await this.courseRepository.setFeedbackForCourse({userId, courseId, rating, review})
+        return {
+            status: feedbackData?.status,
+            message: feedbackData?.message,
+            data: feedbackData?.data,
+        }
+    }
+
+    async getFeedback(query: ParsedQs) {
+        if (query && query.courseId && typeof query.courseId === 'string') {
+            const courseId: ObjectId = query.courseId as unknown as ObjectId; //string to ObjectID
+            const feedback = await this.courseRepository.getFeedbackForCourse(courseId)
+            return {
+                status: feedback?.status,
+                message: feedback?.message,
+                data: feedback?.data,
+            }
+        } else {
+            return {
+                status: 400,
+                message: "Invalid query received"
+            }
+        }
+
+    }
 }
 
 export default courseUsecase

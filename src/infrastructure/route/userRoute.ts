@@ -29,5 +29,7 @@ router.get('/courses', (req, res) => courseControl.listCoursesControl(req, res))
 router.get('/branches', (req, res) => courseControl.listBranches(req, res, role));
 router.post('/course/enroll', (req, res) => courseControl.courseEnrollControl(req, res));
 router.post('/course/enrollCheck', (req, res) => courseControl.enrollCheckControl(req, res));
+router.post('/feedback', (req, res) => courseControl.feedbackControl(req, res));
+router.get('/feedback', (req, res) => courseControl.feedbackGetControl(req, res));
 
 export default router
