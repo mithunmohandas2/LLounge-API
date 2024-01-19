@@ -4,7 +4,6 @@ import { notifications } from '../../domain/notification';
 import { notificationModel } from '../database/notificationModel';
 import { ParsedQs } from "qs";
 
-
 class notificationRepository {
 
     async createNote(data: notifications) {
@@ -38,6 +37,7 @@ class notificationRepository {
         }
     }
 
+
     async getNotifications(query: ParsedQs) {
         try {
             const response = await notificationModel.find({ $or: [{ senderId: query._id }, { receiverId: query._id }, { courseId: query._id }] }).sort({ createdAt: -1 })
@@ -62,6 +62,5 @@ class notificationRepository {
             }
         }
     }
-
 }
 export default notificationRepository

@@ -9,6 +9,7 @@ import adminRepository from "../infrastructure/repository/adminRepository";
 import { notifications } from "../domain/notification";
 import notificationRepository from "../infrastructure/repository/notificationRepository";
 import { ParsedQs } from "qs";
+import { certificate } from "../domain/courses";
 
 const encryptService = new BcryptPasswordHashingService();
 const tokenService = new JWTService()
@@ -139,6 +140,24 @@ class Userusecase {
 
     async getNotifications(query: ParsedQs) {
         const response = await notificationsRepo.getNotifications(query)
+        return {
+            status: response.status,
+            message: response.message,
+            data: response?.data
+        }
+    }
+    
+    async getCertificate(query: ParsedQs) {
+        const response = await this.userRepository.getCertificate(query)
+        return {
+            status: response.status,
+            message: response.message,
+            data: response?.data
+        }
+    }
+    
+    async issueCertificate(data: certificate) {
+        const response = await this.userRepository.issueCertificate(data)
         return {
             status: response.status,
             message: response.message,

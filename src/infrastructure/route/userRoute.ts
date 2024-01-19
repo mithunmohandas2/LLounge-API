@@ -31,5 +31,7 @@ router.post('/course/enroll', (req, res) => courseControl.courseEnrollControl(re
 router.post('/course/enrollCheck', (req, res) => courseControl.enrollCheckControl(req, res));
 router.post('/feedback', (req, res) => courseControl.feedbackControl(req, res));
 router.get('/feedback', (req, res) => courseControl.feedbackGetControl(req, res));
+router.get('/certificate', (req, res) => controller.getCertificateControl(req, res));
+router.post('/certificate', (req, res) => controller.issueCertificateControl(req, res));
 
 export default router

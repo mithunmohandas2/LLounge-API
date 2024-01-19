@@ -109,6 +109,28 @@ class userController {
         }
     }
 
+    async getCertificateControl(req: Request, res: Response) {
+        try {
+            if (!req?.query?.courseId || !req?.query?.userId) return res.status(401).json({ success: false, message: 'missing query' });
+            const response = await this.usercase.getCertificate(req.query)
+            // console.log(Course)    //test
+            res.status(response?.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
+
+    async issueCertificateControl(req: Request, res: Response) {
+        try {
+            const response = await this.usercase.issueCertificate(req.body)
+            // console.log(Course)    //test
+            res.status(response?.status).json(response)
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: (error as Error).message });
+        }
+    }
 
 }
 

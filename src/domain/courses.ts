@@ -41,3 +41,13 @@ export interface enrollments {
         progress: number,
     }[]
 }
+
+export interface certificate {
+    userId: ObjectId,
+    courseId: ObjectId,
+    courseName: string;
+    userName: string;
+    marks: number;
+    tutorName: string;
+    createdAt: Date;
+}
