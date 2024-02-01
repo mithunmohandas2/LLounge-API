@@ -31,6 +31,7 @@ export const createServer = () => {
 
         //test Route
         app.get('/', (req, res) => res.status(200).json({ message: 'API running successfully' }));
+        app.get('/api', (req, res) => res.status(200).json({ message: 'API initialized successfully' }));
 
         return app
     }
